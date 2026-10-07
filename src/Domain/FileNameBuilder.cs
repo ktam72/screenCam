@@ -1,4 +1,5 @@
 // REQ-006: 出力ファイル命名規則 <prefix>_<yyyyMMdd>_<HHmmss>.mp4
+// REQ-006: 録画中の一時ファイルは固定名 .tmp.mp4 / .tmp.wav (承認 2026-10-08)。停止後に確定名へリネーム
 namespace ScreenCam.Domain;
 
 using System.IO;
@@ -25,14 +26,6 @@ public static class FileNameBuilder
         if (!IsValidPrefix(prefix))
             throw new ArgumentException($"prefix が不正: {prefix}", nameof(prefix));
         return $"{prefix}_{now:yyyyMMdd}_{now:HHmmss}.{extension}";
-    }
-
-    // 録画中は _tmp を付けた一時ファイル、停止後に確定名へリネームする (REQ-006)
-    public static string BuildTemp(string prefix, DateTimeOffset now, string extension = "mp4")
-    {
-        if (!IsValidPrefix(prefix))
-            throw new ArgumentException($"prefix が不正: {prefix}", nameof(prefix));
-        return $"{prefix}_{now:yyyyMMdd}_{now:HHmmss}_tmp.{extension}";
     }
 
     public static string ResolveCollision(string dir, string prefix, DateTimeOffset now, string extension = "mp4")

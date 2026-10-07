@@ -78,7 +78,10 @@ public sealed class Recorder : IDisposable
         if (item == null)
             return false;
 
-        CropRect crop = target.Rect.Normalize();
+        // REQ-003: 矩形が空 (0x0) は「モニタ全体」を意味する。ホットキー起動では選択矩形が無い
+        CropRect crop = target.Rect.Width == 0 || target.Rect.Height == 0
+            ? new CropRect(0, 0, item.Size.Width, item.Size.Height)
+            : target.Rect.Normalize();
 
         // FFmpeg が起動できない状態で capture を始めるとフレームを捨てるだけになる
         encoder = FfmpegSession.TryCreate(config, item.Size.Width, item.Size.Height, crop);

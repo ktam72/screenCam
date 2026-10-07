@@ -29,9 +29,7 @@ src/
     CaptureTarget.cs         REQ-003  選択結果 (hwnd / monitor index / rect)
   Capture/
     CaptureItemFactory.cs    REQ-003  WGC item (CreateForWindow / CreateForMonitor)
-    FrameSource.cs           REQ-004  Direct3D11CaptureFramePool -> BGRA staging
-    RegionSelector.cs        REQ-002  矩形選択オーバーレイウィンドウ
-    WindowPicker.cs          REQ-002  ウィンドウピッカー
+    FrameSource.cs           REQ-004  Direct3D11CaptureFramePool -> SoftwareBitmap
   Encode/
     FfmpegSession.cs         REQ-004  rawvideo pipe -> h264_nvenc -> .tmp.mp4
     FfmpegPath.cs            REQ-004  ffmpeg パス解決 (共有)
@@ -40,10 +38,10 @@ src/
     Recovery.cs              REQ-008  起動時 .tmp 走査
   Recording/
     Recorder.cs              REQ-003  オーケストレーター (item -> ffmpeg -> audio -> frame source -> mux)。Ui 依存なし
-  Hotkeys/
-    HotkeyManager.cs         REQ-002  RegisterHotKey + WM_HOTKEY (HwndSource)
   Ui/
-    TrayIcon.cs              REQ-001  トレイアイコン + 状態表示
+    TrayIcon.cs              REQ-002  トレイメニュー (実行/停止/領域選択/ウィンドウ選択/設定/終了) + 状態表示
+    RegionSelectorWindow.xaml(.cs) REQ-003  矩形選択オーバーレイ (選択即開始)
+    WindowPickerWindow.xaml(.cs)   REQ-003  ウィンドウピッカー (選択即開始)
     SettingsWindow.xaml(.cs) REQ-007  View
     SettingsViewModel.cs     REQ-007  ViewModel
   Logging/
@@ -52,7 +50,6 @@ tests/
   FileNameBuilderTests.cs    REQ-006
   ConfigStoreTests.cs        REQ-007
   CropRectTests.cs           REQ-003
-  HotkeyParserTests.cs       REQ-002
   FfmpegSessionTests.cs      REQ-004 (結合)
 ```
 

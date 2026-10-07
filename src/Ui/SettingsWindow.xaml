@@ -1,0 +1,120 @@
+<!-- REQ-007: View は ViewModel へだけBindingする (ロジックを持たない) -->
+<Window x:Class="ScreenCam.Ui.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="screenCam 設定"
+        Width="560"
+        SizeToContent="Height"
+        MaxHeight="760"
+        WindowStartupLocation="CenterScreen">
+  <Grid Margin="12">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+
+    <!-- 19 行はウィンドウ高さを超えることがあるためスクロール可能にする -->
+    <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
+    <Grid>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="150" />
+        <ColumnDefinition Width="*" />
+      </Grid.ColumnDefinitions>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+      </Grid.RowDefinitions>
+
+      <TextBlock Grid.Row="0" Text="config" />
+      <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding ConfigPath}" />
+
+      <TextBlock Grid.Row="1" Text="prefix" />
+      <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Prefix}" />
+
+      <TextBlock Grid.Row="2" Text="output_dir" />
+      <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding OutputDir}" />
+
+      <TextBlock Grid.Row="3" Text="ffmpeg_path" />
+      <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding FfmpegPath}" />
+
+      <TextBlock Grid.Row="4" Text="capture_mode" />
+      <ComboBox Grid.Row="4" Grid.Column="1" ItemsSource="{Binding Modes}" SelectedItem="{Binding CaptureModeName}" />
+
+      <TextBlock Grid.Row="5" Text="monitor_index" />
+      <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding MonitorIndex}" />
+
+      <TextBlock Grid.Row="6" Text="width" />
+      <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Width}" />
+
+      <TextBlock Grid.Row="7" Text="height" />
+      <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding Height}" />
+
+      <TextBlock Grid.Row="8" Text="fps" />
+      <TextBox Grid.Row="8" Grid.Column="1" Text="{Binding Fps}" />
+
+      <TextBlock Grid.Row="9" Text="video_encoder" />
+      <ComboBox Grid.Row="9" Grid.Column="1" ItemsSource="{Binding Encoders}" SelectedItem="{Binding VideoEncoder}" />
+
+      <TextBlock Grid.Row="10" Text="nvenc_preset" />
+      <ComboBox Grid.Row="10" Grid.Column="1" ItemsSource="{Binding Presets}" SelectedItem="{Binding NvencPreset}" />
+
+      <TextBlock Grid.Row="11" Text="cq" />
+      <TextBox Grid.Row="11" Grid.Column="1" Text="{Binding Cq}" />
+
+      <TextBlock Grid.Row="12" Text="audio_enabled" />
+      <CheckBox Grid.Row="12" Grid.Column="1" IsChecked="{Binding AudioEnabled}" />
+
+      <TextBlock Grid.Row="13" Text="audio_device" />
+      <ComboBox Grid.Row="13" Grid.Column="1" ItemsSource="{Binding AudioDevices}" SelectedItem="{Binding SelectedAudioDevice}" />
+
+      <TextBlock Grid.Row="14" Text="hotkey_start" />
+      <TextBox Grid.Row="14" Grid.Column="1" Text="{Binding HotkeyStartStop}" />
+
+      <TextBlock Grid.Row="15" Text="hotkey_region" />
+      <TextBox Grid.Row="15" Grid.Column="1" Text="{Binding HotkeyRegionSelect}" />
+
+      <TextBlock Grid.Row="16" Text="hotkey_window" />
+      <TextBox Grid.Row="16" Grid.Column="1" Text="{Binding HotkeyWindowPicker}" />
+
+      <TextBlock Grid.Row="17" Text="log_level" />
+      <ComboBox Grid.Row="17" Grid.Column="1" ItemsSource="{Binding LogLevels}" SelectedItem="{Binding LogLevelName}" />
+
+      <TextBlock Grid.Row="18" Text="autostart" />
+      <CheckBox Grid.Row="18" Grid.Column="1" IsChecked="{Binding AutoStart}" />
+    </Grid>
+    </ScrollViewer>
+
+    <!-- REQ-008: 検証エラーは対処方法を含むメッセージとして画面へ -->
+    <ItemsControl Grid.Row="1" ItemsSource="{Binding Errors}" Margin="0,12,0,0">
+      <ItemsControl.ItemTemplate>
+        <DataTemplate>
+          <TextBlock Foreground="DarkRed" TextWrapping="Wrap" Text="{Binding}" />
+        </DataTemplate>
+      </ItemsControl.ItemTemplate>
+    </ItemsControl>
+
+    <Button Grid.Row="2"
+            Content="保存"
+            HorizontalAlignment="Right"
+            Padding="16,6"
+            Command="{Binding SaveCommand}" />
+  </Grid>
+</Window>

@@ -34,9 +34,12 @@ src/
     WindowPicker.cs          REQ-002  ウィンドウピッカー
   Encode/
     FfmpegSession.cs         REQ-004  rawvideo pipe -> h264_nvenc -> .tmp.mp4
+    FfmpegPath.cs            REQ-004  ffmpeg パス解決 (共有)
     AudioRecorder.cs         REQ-005  WASAPI loopback -> .tmp.wav
     Muxer.cs                 REQ-005  停止後 mux (video copy + aac)
     Recovery.cs              REQ-008  起動時 .tmp 走査
+  Recording/
+    Recorder.cs              REQ-003  オーケストレーター (item -> ffmpeg -> audio -> frame source -> mux)。Ui 依存なし
   Hotkeys/
     HotkeyManager.cs         REQ-002  RegisterHotKey + WM_HOTKEY (HwndSource)
   Ui/

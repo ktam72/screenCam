@@ -113,5 +113,5 @@ ffmpeg -hide_banner -loglevel error -y \
 ## 未決 (実装前に確認)
 
 - 自動起動の既定値: on か off か
-- 録画中の一時ファイル名: `.tmp.mp4` (固定) か `prefix_..._tmp.mp4` か
+- ~~録画中の一時ファイル名~~ 決定: 固定 `.tmp.mp4` / `.tmp.wav` (承認 2026-10-08。単一インスタンスガードで競合せず recovery 走査が単純)
 - トレイアイコンの状態色 (idle/recording/paused) の具体値

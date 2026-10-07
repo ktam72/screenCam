@@ -54,7 +54,7 @@ Platform: Windows 11 / .NET 10 (SDK 10.0.401)
 ### REQ-005 音声
 
 - WASAPI loopback (既定の render デバイス) を NAudio で録音
-- 48kHz / 16bit / stereo PCM を録画中 `.wav` に並列記録
+- device ネイティブフォーマットで `.tmp.wav` に並列記録 (実務上 48kHz / 32bit float / stereo。16bit 変換は入れない。承認 2026-10-08)
 - 停止後に AAC へ変換し mp4 へ mux (FFmpeg 第2パス, 映像 stream copy)
 - config で `audio: off` 可
 - loopback デバイス未検出時は音声なしで録画継続 (warn)

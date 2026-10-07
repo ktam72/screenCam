@@ -27,4 +27,9 @@
     <PackageReference Include="Vortice.DXGI" Version="3.8.3" />
   </ItemGroup>
 
+  <!-- REQ-001: トレイアイコン (.ico)。実行ファイルと同じ場所へコピーする -->
+  <ItemGroup>
+    <Content Include="assets\*.ico" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
 </Project>

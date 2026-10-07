@@ -1,0 +1,9 @@
+bin/
+obj/
+.vs/
+TestResults/
+logs/
+config.yaml
+*.tmp.mp4
+*.tmp.wav
+*.log

@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <!-- REQ-003: 実機 build 26300 と一致。IsBorderRequired / IsCursorCaptureEnabled は 26100 projection に存在 -->
+    <TargetFramework>net10.0-windows10.0.26100.0</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <RootNamespace>ScreenCam</RootNamespace>
+  </PropertyGroup>
+
+  <!-- 依存 (承認済み 2026-10-08) -->
+  <ItemGroup>
+    <PackageReference Include="YamlDotNet" Version="18.1.0" />
+    <PackageReference Include="NAudio" Version="2.4.0" />
+    <PackageReference Include="Hardcodet.NotifyIcon.WPF" Version="2.0.1" />
+
+    <!-- REQ-003/004: CsWinRT の source generator は SDK 10.0.401 では自動参照されないため明示 (実測) -->
+    <PackageReference Include="Microsoft.Windows.CsWinRT" Version="2.2.0" />
+
+    <!-- REQ-004: D3D11 interop。Vortice.DirectX 単独では Vortice.Direct3D11 名前空間の型が無い (実測) -->
+    <PackageReference Include="Vortice.DirectX" Version="3.8.3" />
+    <PackageReference Include="Vortice.Direct3D11" Version="3.8.3" />
+    <PackageReference Include="Vortice.DXGI" Version="3.8.3" />
+  </ItemGroup>
+
+</Project>

@@ -127,13 +127,15 @@ public sealed class FfmpegSession : IFrameSink, IDisposable
     {
         StringBuilder filters = new();
 
-        if (crop != null && !crop.IsFullFrame(frameWidth, frameHeight))
-            filters.Append($"crop={crop.Width}:{crop.Height}:{crop.X}:{crop.Y}");
+        bool cropped = crop != null && !crop.IsFullFrame(frameWidth, frameHeight);
 
-        if (config.Width != frameWidth || config.Height != frameHeight)
+        if (cropped)
         {
-            if (filters.Length > 0)
-                filters.Append(',');
+            // REQ-003: region モード (crop が効く) は crop サイズで出す。config へアップスケールしない (案A 承認 2026-10-08)
+            filters.Append($"crop={crop!.Width}:{crop!.Height}:{crop!.X}:{crop!.Y}");
+        }
+        else if (config.Width != frameWidth || config.Height != frameHeight)
+        {
             filters.Append($"scale={config.Width}:{config.Height}");
         }
 

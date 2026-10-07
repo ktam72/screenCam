@@ -1,0 +1,30 @@
+<!-- REQ-003: ウィンドウピッカー。可視トップレベルウィンドウから選んで確定する -->
+<Window x:Class="ScreenCam.Ui.WindowPickerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="screenCam ウィンドウ選択"
+        Width="560"
+        SizeToContent="Height"
+        MaxHeight="700"
+        WindowStartupLocation="CenterScreen">
+  <Grid Margin="12">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+
+    <TextBlock Grid.Row="0"
+               Text="クリックで選択 → Enter で確定 / Esc でキャンセル" />
+
+    <ListBox Grid.Row="1"
+             x:Name="WindowList"
+             Height="360"
+             Margin="0,8,0,0" />
+
+    <TextBlock Grid.Row="2"
+               x:Name="Info"
+               Margin="0,8,0,0"
+               Foreground="DarkRed" />
+  </Grid>
+</Window>

@@ -1,0 +1,29 @@
+<!-- REQ-003: 領域選択オーバーレイ。半透明背景で仮想画面全体を覆い、ドラッグで矩形を選ぶ -->
+<Window x:Class="ScreenCam.Ui.RegionSelectorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="screenCam 領域選択"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="#33000000"
+        Topmost="True"
+        ResizeMode="NoResize"
+        ShowInTaskbar="False">
+  <Canvas>
+    <Rectangle x:Name="SelectionRect"
+               Stroke="White"
+               StrokeThickness="2"
+               Fill="#22FFFFFF" />
+    <TextBlock x:Name="Hint"
+               Canvas.Left="16"
+               Canvas.Top="12"
+               FontSize="14"
+               Foreground="White"
+               Text="ドラッグで領域を選択 &#13;&#10;Enter で確定 / Esc でキャンセル" />
+    <TextBlock x:Name="SizeInfo"
+               Canvas.Left="16"
+               Canvas.Top="60"
+               FontSize="14"
+               Foreground="White" />
+  </Canvas>
+</Window>

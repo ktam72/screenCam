@@ -15,7 +15,9 @@ public sealed class FfmpegSession : IFrameSink, IDisposable
     private const int ExitTimeoutMs = 15000;
     private const int ProbeTimeoutMs = 10000;
     private const int StderrTailChars = 2000;
-    private const string TempFileName = ".tmp.mp4";
+
+    // REQ-006: 録画中の一時ファイルは固定名 (単一インスタンスガードで競合しない。Recovery の走査も単純化)
+    public const string TempVideoName = ".tmp.mp4";
 
     private readonly Config config;
     private readonly CropRect? crop;
@@ -36,7 +38,7 @@ public sealed class FfmpegSession : IFrameSink, IDisposable
     // 起動失敗は null を返す (呼び出し側が warn して処理を終える)
     public static FfmpegSession? TryCreate(Config config, int frameWidth, int frameHeight, CropRect? crop)
     {
-        string? ffmpegPath = ResolveFfmpegPath(config);
+        string? ffmpegPath = FfmpegPath.Resolve(config);
         if (ffmpegPath == null)
         {
             Log.Error("REQ-004: ffmpeg が見つかりません。config.yaml の ffmpeg_path にフルパスを設定してください");
@@ -71,7 +73,7 @@ public sealed class FfmpegSession : IFrameSink, IDisposable
         this.crop = crop;
         this.encoder = encoder;
         this.ffmpegPath = ffmpegPath;
-        TempPath = Path.Combine(config.OutputDir, TempFileName);
+        TempPath = Path.Combine(config.OutputDir, TempVideoName);
     }
 
     private readonly int frameWidth;
@@ -233,26 +235,6 @@ public sealed class FfmpegSession : IFrameSink, IDisposable
     {
         string text = stderr.ToString();
         return text.Length > StderrTailChars ? text.Substring(text.Length - StderrTailChars) : text;
-    }
-
-    // REQ-004: PATH 変更が効かない環境でも動くよう config のフルパスを優先し、無ければ PATH を探す
-    private static string? ResolveFfmpegPath(Config config)
-    {
-        if (!string.IsNullOrWhiteSpace(config.FfmpegPath))
-            return File.Exists(config.FfmpegPath) ? config.FfmpegPath : null;
-
-        string pathVar = Environment.GetEnvironmentVariable("PATH") ?? string.Empty;
-        foreach (string dir in pathVar.Split(Path.PathSeparator))
-        {
-            if (string.IsNullOrEmpty(dir))
-                continue;
-
-            string candidate = Path.Combine(dir, "ffmpeg.exe");
-            if (File.Exists(candidate))
-                return candidate;
-        }
-
-        return null;
     }
 
     // REQ-004: encoder を実機で probe して使えなければ libx264 へフォールバック

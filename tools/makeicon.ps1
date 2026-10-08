@@ -1,13 +1,17 @@
 # REQ-001: トレイアイコン (.ico) を生成する
 # PNG エントリを持つ ICO を組み立てる (Vista 以降は ICO 内 PNG を許容)。16px と 32px を1枚に収める。
-# 用法: powershell -NoProfile -File tools/makeicon.ps1
+# 用法: powershell -NoProfile -File tools/makeicon.ps1 [-PreviewDir <dir>]
+param(
+    [string]$PreviewDir = ''
+)
+
 Add-Type -AssemblyName System.Drawing
 
 $outDir = Join-Path (Get-Location) 'assets'
 New-Item -ItemType Directory -Force -Path $outDir | Out-Null
 
 function New-PngBytes {
-    param([int]$Size, [string]$Text, [int]$R, [int]$G, [int]$B)
+    param([int]$Size, [string]$Text, [int]$R, [int]$G, [int]$B, [string]$State = 'idle')
 
     $back = [System.Drawing.Color]::FromArgb($R, $G, $B)
 
@@ -33,14 +37,34 @@ function New-PngBytes {
     $brush = [System.Drawing.SolidBrush]::new($back)
     $gfx.FillPath($brush, $path)
 
-    $fontSize = 8
-    if ($Size -ge 32) { $fontSize = 11 }
+    # 折り返しを防ぐため、文字が収まるフォントサイズまで縮める (MeasureString で確認)
+    $pad = 1
+    $maxW = $Size - 2 * $pad
+    $maxH = $Size - 2 * $pad
 
-    $font = [System.Drawing.Font]::new('Segoe UI', $fontSize, [System.Drawing.FontStyle]::Bold)
+    $fontSize = 12.0
+    $font = [System.Drawing.Font]::new('Segoe UI', [single]$fontSize, [System.Drawing.FontStyle]::Bold)
+
+    while ($fontSize -gt 3.0) {
+        $measured = $gfx.MeasureString($Text, $font)
+        if ($measured.Width -le $maxW -and $measured.Height -le $maxH) {
+            break
+        }
+        $fontSize -= 0.5
+        $font.Dispose()
+        $font = [System.Drawing.Font]::new('Segoe UI', [single]$fontSize, [System.Drawing.FontStyle]::Bold)
+    }
+
+    # 折り返し判定: MeasureString は折り返した時の高さを返すため、単行の高さと比較する
+    $measured = $gfx.MeasureString($Text, $font)
+    Write-Host ("fit: {0}px '{1}' font={2:F1}pt w={3:F1} h={4:F1} (max {5}x{6}) wrap={7}" -f `
+        $Size, $Text, $fontSize, $measured.Width, $measured.Height, $maxW, $maxH, ($measured.Height -gt $font.Height * 1.6))
 
     $format = [System.Drawing.StringFormat]::new()
     $format.Alignment = [System.Drawing.StringAlignment]::Center
     $format.LineAlignment = [System.Drawing.StringAlignment]::Center
+    # 折り返し・省略記号を禁止 (フォントサイズで収まることを確認済み)
+    $format.Trimming = [System.Drawing.StringTrimming]::None
 
     $rectF = [System.Drawing.RectangleF]::new(0, 0, $Size, $Size)
     $gfx.DrawString($Text, $font, [System.Drawing.Brushes]::White, $rectF, $format)
@@ -48,10 +72,17 @@ function New-PngBytes {
     $ms = [System.IO.MemoryStream]::new()
     $bmp.Save($ms, [System.Drawing.Imaging.ImageFormat]::Png)
 
+    if ($PreviewDir -ne '') {
+        New-Item -ItemType Directory -Force -Path $PreviewDir | Out-Null
+        $pngPath = Join-Path $PreviewDir ("icon_{0}_{1}_{2}.png" -f $State, $Size, ($Text -replace '[^A-Za-z0-9]', ''))
+        [System.IO.File]::WriteAllBytes($pngPath, $ms.ToArray())
+    }
+
     $gfx.Dispose()
     $bmp.Dispose()
     $brush.Dispose()
     $font.Dispose()
+    $format.Dispose()
 
     return ,$ms.ToArray()
 }
@@ -87,14 +118,15 @@ function New-IcoFile {
     Write-Output "written: $Path ($($bytes.Count) bytes)"
 }
 
+# 折り返さないよう 3 文字にする (16px でも収まる)
 $idle = @(
-    @{ Size = 16; Bytes = (New-PngBytes -Size 16 -Text 's' -R 37 -G 99 -B 235) },
-    @{ Size = 32; Bytes = (New-PngBytes -Size 32 -Text 'sCam' -R 37 -G 99 -B 235) }
+    @{ Size = 16; Bytes = (New-PngBytes -Size 16 -Text 'CAM' -R 37 -G 99 -B 235 -State 'idle') },
+    @{ Size = 32; Bytes = (New-PngBytes -Size 32 -Text 'CAM' -R 37 -G 99 -B 235 -State 'idle') }
 )
 
 $recording = @(
-    @{ Size = 16; Bytes = (New-PngBytes -Size 16 -Text 's' -R 220 -G 38 -B 38) },
-    @{ Size = 32; Bytes = (New-PngBytes -Size 32 -Text 'sCam' -R 220 -G 38 -B 38) }
+    @{ Size = 16; Bytes = (New-PngBytes -Size 16 -Text 'CAM' -R 220 -G 38 -B 38 -State 'recording') },
+    @{ Size = 32; Bytes = (New-PngBytes -Size 32 -Text 'CAM' -R 220 -G 38 -B 38 -State 'recording') }
 )
 
 New-IcoFile -Path (Join-Path $outDir 'scam.ico') -Entries $idle

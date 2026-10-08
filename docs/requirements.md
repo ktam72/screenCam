@@ -25,7 +25,8 @@ Platform: Windows 11 / .NET 10 (SDK 10.0.401)
 - タスクトレイアイコンで常駐する
 - named mutex により単一インスタンスを保証する (二重起動時は既存インスタンスへ通知して終了)
 - 録画状態 (idle / recording / paused) をトレイアイコンとツールチップで表示する
-- ログイン時自動起動: 未決 (Open Issue #4)
+- ログイン時自動起動: HKCU の Run キーで実装 (承認 2026-10-08)。`autostart` が true の時 `screenCam` 値へ exe パスを登録し、false 時は解除する
+- 設定とログは exe と同じ場所へ置く (ログイン時起動は cwd が保証されないため。承認 2026-10-08)
 
 ### REQ-002 タスクトレイのコンテキストメニュー
 
@@ -119,6 +120,6 @@ Platform: Windows 11 / .NET 10 (SDK 10.0.401)
 1. 同名ファイル衝突規則 (秒加算 / 連番 / 上書き)
 2. クラッシュ時の一時ファイル (.tmp.*) の recovery 方針
 3. mux 方式: 停止後 FFmpeg 2パス (現案) かリアルタイム mux か
-4. ログイン時自動起動の要否 (Scheduled Task / Startup)
+4. ログイン時自動起動: 解決 (2026-10-08)。HKCU Run キー + `autostart` で制御。設定とログは exe と同じ場所
 5. `git init` の要否 (現状 git repo ではない)
 6. 領域選択オーバーレイの操作詳細 (ドラッグ確定 / Enter 確定)

@@ -24,6 +24,7 @@ src/
   Domain/
     Config.cs                REQ-007  設定モデル
     ConfigStore.cs           REQ-007  config.yaml 読み書き (YamlDotNet)
+    AutoStart.cs             REQ-001  ログイン時自動起動 (HKCU Run キー)
     FileNameBuilder.cs       REQ-006  prefix_yyyyMMdd_HHmmss.mp4 + 衝突回避
     CaptureMode.cs           REQ-003  enum Window/Monitor/Region
     CaptureTarget.cs         REQ-003  選択結果 (hwnd / monitor index / rect)

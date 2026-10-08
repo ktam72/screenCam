@@ -18,6 +18,8 @@ Windows 11 常駐スクリーンレコーダー。タスクトレイのアイコ
 
 ## インストール
 
+### Debug ビルド（開発用）
+
 ```
 git clone <repo>
 cd screenCam
@@ -25,6 +27,26 @@ dotnet build
 ```
 
 実行ファイル: `bin/Debug/net10.0-windows10.0.26100.0/screenCam.exe`
+
+### Release ビルド
+
+```
+dotnet build -c Release
+```
+
+実行ファイル: `bin/Release/net10.0-windows10.0.26100.0/screenCam.exe`
+
+### 配布（publish）
+
+```
+dotnet publish -c Release -o publish\scam
+```
+
+- framework-dependent（実行先に .NET 10 ランタイムが必要）
+- 実行ファイル: `publish\scam\screenCam.exe`
+- `config.yaml` と `logs\` は exe と同じ場所（`publish\scam\`）に置く
+- `publish/` は `.gitignore` 済み
+- ログイン時自動起動を有効にするとこの exe が Run キーに登録される（詳しくは「ログイン時自動起動」節）
 
 ## クイックスタート
 
@@ -57,8 +79,20 @@ dotnet build
 | `ffmpeg_path` | （空 = PATH 検索） | フルパスで書くと確実 |
 | `capture_mode` | `Monitor` | `Window` / `Region` / `Monitor` |
 | `monitor_index` | 0 | 対象モニタ |
-| `autostart` | `True` | ログイン時自動起動（未実装） |
+| `autostart` | `True` | ログイン時自動起動（HKCU Run キー。設定保存で登録/解除） |
 | `log_level` | `Info` | `Trace` / `Debug` / `Info` / `Warn` / `Error` |
+
+## ログイン時自動起動
+
+- `autostart` が `True`（既定）のとき、HKCU の `Software\Microsoft\Windows\CurrentVersion\Run` に `screenCam` 値として実行中 exe のパスを登録する。`False` にすると解除される（設定保存で反映、有効化は次回ログインから）
+- 配布は publish 出力を固定フォルダにする
+
+  ```
+  dotnet publish -c Release -o publish\scam
+  ```
+
+- `config.yaml` と `logs\` は exe と同じ場所（`publish\scam\`）に置く。ログイン時起動は cwd が保証されないため exe 基準
+- Run キーと手動起動が重なっても named mutex により既存インスタンスが優先される
 
 ## 補足
 
@@ -82,5 +116,7 @@ dev-toolchain format .
 dev-toolchain lint .
 dev-toolchain scan .
 ```
+
+- Release ビルド: `dotnet build -c Release`（実測 0警告0エラー）。配布は `dotnet publish -c Release -o publish\scam`
 
 コミットは Conventional Commits + REQ-ID（例: `feat: REQ-006 出力ファイル命名規則を追加`）。

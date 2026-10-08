@@ -85,9 +85,6 @@ public sealed class ConfigStore
             LogLevel = GetEnum(map, "log_level", defaults.LogLevel),
         };
 
-        cfg.Hotkeys.StartStop = GetString(map, "hotkey_start", cfg.Hotkeys.StartStop);
-        cfg.Hotkeys.RegionSelect = GetString(map, "hotkey_region", cfg.Hotkeys.RegionSelect);
-        cfg.Hotkeys.WindowPicker = GetString(map, "hotkey_window", cfg.Hotkeys.WindowPicker);
         return cfg;
     }
 
@@ -108,9 +105,6 @@ public sealed class ConfigStore
         ["monitor_index"] = cfg.MonitorIndex.ToString(),
         ["autostart"] = cfg.AutoStart.ToString(),
         ["log_level"] = cfg.LogLevel.ToString(),
-        ["hotkey_start"] = cfg.Hotkeys.StartStop,
-        ["hotkey_region"] = cfg.Hotkeys.RegionSelect,
-        ["hotkey_window"] = cfg.Hotkeys.WindowPicker,
     };
 
     private static string GetString(Dictionary<string, string?> map, string key, string fallback)

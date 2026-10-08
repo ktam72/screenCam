@@ -21,10 +21,8 @@
         <ColumnDefinition Width="150" />
         <ColumnDefinition Width="*" />
       </Grid.ColumnDefinitions>
+      <!-- 16 行はウィンドウ高さを超えることがあるためスクロール可能にする -->
       <Grid.RowDefinitions>
-        <RowDefinition Height="Auto" />
-        <RowDefinition Height="Auto" />
-        <RowDefinition Height="Auto" />
         <RowDefinition Height="Auto" />
         <RowDefinition Height="Auto" />
         <RowDefinition Height="Auto" />
@@ -85,20 +83,11 @@
       <TextBlock Grid.Row="13" Text="audio_device" />
       <ComboBox Grid.Row="13" Grid.Column="1" ItemsSource="{Binding AudioDevices}" SelectedItem="{Binding SelectedAudioDevice}" />
 
-      <TextBlock Grid.Row="14" Text="hotkey_start" />
-      <TextBox Grid.Row="14" Grid.Column="1" Text="{Binding HotkeyStartStop}" />
+      <TextBlock Grid.Row="14" Text="log_level" />
+      <ComboBox Grid.Row="14" Grid.Column="1" ItemsSource="{Binding LogLevels}" SelectedItem="{Binding LogLevelName}" />
 
-      <TextBlock Grid.Row="15" Text="hotkey_region" />
-      <TextBox Grid.Row="15" Grid.Column="1" Text="{Binding HotkeyRegionSelect}" />
-
-      <TextBlock Grid.Row="16" Text="hotkey_window" />
-      <TextBox Grid.Row="16" Grid.Column="1" Text="{Binding HotkeyWindowPicker}" />
-
-      <TextBlock Grid.Row="17" Text="log_level" />
-      <ComboBox Grid.Row="17" Grid.Column="1" ItemsSource="{Binding LogLevels}" SelectedItem="{Binding LogLevelName}" />
-
-      <TextBlock Grid.Row="18" Text="autostart" />
-      <CheckBox Grid.Row="18" Grid.Column="1" IsChecked="{Binding AutoStart}" />
+      <TextBlock Grid.Row="15" Text="autostart" />
+      <CheckBox Grid.Row="15" Grid.Column="1" IsChecked="{Binding AutoStart}" />
     </Grid>
     </ScrollViewer>
 

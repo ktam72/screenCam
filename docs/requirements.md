@@ -73,7 +73,7 @@ Platform: Windows 11 / .NET 10 (SDK 10.0.401)
 ### REQ-007 設定ウィンドウ (MVVM)
 
 - View / ViewModel / Model を分離
-- 項目: prefix, output dir, fps, width, height, codec, preset, cq, audio device, hotkeys, capture mode
+- 項目: prefix, output dir, fps, width, height, codec, preset, cq, audio device, capture mode, log level, autostart
 - 永続化は `config.yaml` (YamlDotNet)
 - `config.yaml` は `.gitignore` に登録 (個人設定を含む)
 

@@ -152,24 +152,6 @@ public sealed class SettingsViewModel : INotifyPropertyChanged
         set => Set(config.AutoStart, value, v => config.AutoStart = v);
     }
 
-    public string HotkeyStartStop
-    {
-        get => config.Hotkeys.StartStop;
-        set => Set(config.Hotkeys.StartStop, value, v => config.Hotkeys.StartStop = v);
-    }
-
-    public string HotkeyRegionSelect
-    {
-        get => config.Hotkeys.RegionSelect;
-        set => Set(config.Hotkeys.RegionSelect, value, v => config.Hotkeys.RegionSelect = v);
-    }
-
-    public string HotkeyWindowPicker
-    {
-        get => config.Hotkeys.WindowPicker;
-        set => Set(config.Hotkeys.WindowPicker, value, v => config.Hotkeys.WindowPicker = v);
-    }
-
     // REQ-007: 保存前に必ず検証し、不正値は画面へ出す (REQ-008 のビジネスエラー)
     private void Save()
     {

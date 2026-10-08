@@ -4,13 +4,6 @@ namespace ScreenCam.Domain;
 using System.IO;
 using ScreenCam.Logging;
 
-public sealed class HotkeyConfig
-{
-    public string StartStop { get; set; } = "Ctrl+Alt+R";
-    public string RegionSelect { get; set; } = "Ctrl+Alt+S";
-    public string WindowPicker { get; set; } = "Ctrl+Alt+W";
-}
-
 public sealed class Config
 {
     public const int MaxPrefixLength = 16;
@@ -29,7 +22,6 @@ public sealed class Config
     public string FfmpegPath { get; set; } = string.Empty;
     public CaptureMode CaptureMode { get; set; } = CaptureMode.Monitor;
     public int MonitorIndex { get; set; }
-    public HotkeyConfig Hotkeys { get; set; } = new();
     public bool AutoStart { get; set; } = true;
     public LogLevel LogLevel { get; set; } = LogLevel.Info;
 

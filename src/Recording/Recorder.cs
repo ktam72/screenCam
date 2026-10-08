@@ -1,4 +1,4 @@
-// REQ-003/004/005/006: 録画のオーケストレーター。Ui 依存なし (TrayIcon / HotkeyManager はこれを呼ぶだけ)
+// REQ-003/004/005/006: 録画のオーケストレーター。Ui 依存なし (TrayIcon はこれを呼ぶだけ)
 namespace ScreenCam.Recording;
 
 using System;

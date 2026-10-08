@@ -7,3 +7,4 @@ config.yaml
 *.tmp.mp4
 *.tmp.wav
 *.log
+publish/

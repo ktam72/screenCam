@@ -169,6 +169,9 @@ public sealed class SettingsViewModel : INotifyPropertyChanged
         {
             store.Save(config);
             Log.Info($"REQ-007: config を保存しました ({store.Path})");
+
+            // REQ-001: autostart の変更は次回ログインから反映。この VM の AutoStart プロパティと名前が衝突するため完全修飾 (実測)
+            ScreenCam.Domain.AutoStart.Apply(config.AutoStart, Environment.ProcessPath ?? AppContext.BaseDirectory);
         }
         catch (Exception ex)
         {

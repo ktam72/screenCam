@@ -1,7 +1,8 @@
-// REQ-001: entry point + named mutex による単一インスタンス
+// REQ-001: entry point + named mutex による単一インスタンス + ログイン時自動起動 (Run キー)
 // REQ-002: タスクトレイのコンテキストメニューで操作する (ホットキーは廃止 2026-10-08)
 // REQ-008: 起動時に .tmp.* を recovery する
 using System;
+using System.IO;
 using System.Threading;
 using System.Windows;
 using ScreenCam.Capture;
@@ -26,9 +27,11 @@ internal static class Program
             return 1;
         }
 
-        Log.Init("logs", LogLevel.Info);
+        // REQ-001: ログイン時起動では cwd が保証されないため、設定とログは exe と同じ場所へ (承認 2026-10-08)
+        string baseDir = AppContext.BaseDirectory;
+        Log.Init(Path.Combine(baseDir, "logs"), LogLevel.Info);
 
-        ConfigStore store = new("config.yaml");
+        ConfigStore store = new(Path.Combine(baseDir, "config.yaml"));
         Config config = store.Load();
 
         var errors = config.Validate();
@@ -38,6 +41,9 @@ internal static class Program
                 Log.Warn($"REQ-007: {error}");
             return 2;
         }
+
+        // REQ-001: config.AutoStart に応じて Run キーを登録/解除 (失敗しても起動を止めない)
+        AutoStart.Apply(config.AutoStart, Environment.ProcessPath ?? baseDir);
 
         Recovery.Run(config);
 

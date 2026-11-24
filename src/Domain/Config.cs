@@ -22,6 +22,8 @@ public sealed class Config
     public string FfmpegPath { get; set; } = string.Empty;
     public CaptureMode CaptureMode { get; set; } = CaptureMode.Monitor;
     public int MonitorIndex { get; set; }
+    // REQ-004: WGC のカーソル合成。既定 off (設計方針 2026-10-08)。設定で true のときのみ反映 (REQ-007)
+    public bool CaptureCursor { get; set; } = false;
     public bool AutoStart { get; set; } = true;
     public LogLevel LogLevel { get; set; } = LogLevel.Info;
 

@@ -39,6 +39,7 @@
         <RowDefinition Height="Auto" />
         <RowDefinition Height="Auto" />
         <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
       </Grid.RowDefinitions>
 
       <TextBlock Grid.Row="0" Text="config" />
@@ -88,6 +89,9 @@
 
       <TextBlock Grid.Row="15" Text="autostart" />
       <CheckBox Grid.Row="15" Grid.Column="1" IsChecked="{Binding AutoStart}" />
+
+      <TextBlock Grid.Row="16" Text="capture_cursor" />
+      <CheckBox Grid.Row="16" Grid.Column="1" IsChecked="{Binding CaptureCursor}" />
     </Grid>
     </ScrollViewer>
 

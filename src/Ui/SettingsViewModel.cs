@@ -152,6 +152,12 @@ public sealed class SettingsViewModel : INotifyPropertyChanged
         set => Set(config.AutoStart, value, v => config.AutoStart = v);
     }
 
+    public bool CaptureCursor
+    {
+        get => config.CaptureCursor;
+        set => Set(config.CaptureCursor, value, v => config.CaptureCursor = v);
+    }
+
     // REQ-007: 保存前に必ず検証し、不正値は画面へ出す (REQ-008 のビジネスエラー)
     private void Save()
     {

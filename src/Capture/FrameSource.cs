@@ -108,7 +108,7 @@ public sealed class FrameSource : IDisposable
         this.sink = sink;
     }
 
-    public bool Start(GraphicsCaptureItem item, int fps)
+    public bool Start(GraphicsCaptureItem item, int fps, bool captureCursor)
     {
         if (disposed)
         {
@@ -129,9 +129,9 @@ public sealed class FrameSource : IDisposable
             winDevice, DirectXPixelFormat.B8G8R8A8UIntNormalized, PoolSize, item.Size);
 
         session = pool.CreateCaptureSession(item);
-        // 枠線・カーソルは既定 off (設計方針 2026-10-08)
+        // 枠線 off (設計方針 2026-10-08)。カーソルは設定 capture_cursor に従う (REQ-004。既定 off)
         session.IsBorderRequired = false;
-        session.IsCursorCaptureEnabled = false;
+        session.IsCursorCaptureEnabled = captureCursor;
 
         if (!PrepareBuffer(item.Size.Width, item.Size.Height))
             return false;

@@ -97,7 +97,7 @@ public sealed class Recorder : IDisposable
             return false;
         }
 
-        if (!source.Start(item, config.Fps))
+        if (!source.Start(item, config.Fps, config.CaptureCursor))
         {
             FailStart();
             return false;

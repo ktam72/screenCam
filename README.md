@@ -14,7 +14,6 @@ Windows 11 常駐スクリーンレコーダー。タスクトレイのアイコ
 - FFmpeg（NVENC が使えること）
   - `winget install Gyan.FFmpeg`
   - 導入済みか確認: `ffmpeg -hide_banner -f lavfi -i color=c=black:s=256x256:d=1 -c:v h264_nvenc -f null -`
-- NVIDIA GPU（実機: RTX 4070 Ti SUPER）
 
 ## インストール
 

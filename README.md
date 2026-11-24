@@ -81,6 +81,7 @@ dotnet publish -c Release -o publish\scam
 | `monitor_index` | 0 | 対象モニタ |
 | `autostart` | `True` | ログイン時自動起動（HKCU Run キー。設定保存で登録/解除） |
 | `log_level` | `Info` | `Trace` / `Debug` / `Info` / `Warn` / `Error` |
+| `capture_cursor` | `False` | 録画にマウスカーソルを含めるか。`True` の時 WGC がカーソルを合成（既定 off） |
 
 ## ログイン時自動起動
 
@@ -98,25 +99,7 @@ dotnet publish -c Release -o publish\scam
 
 - 単一インスタンス: named mutex `Global\screenCam`。二重起動は既存インスタンスを通知して終了する
 - 異常終了した回は、起動時に `.tmp.mp4` / `.tmp.wav` を `recovered_<作成時刻>` へ確定する
-- 音声は再生があった区間だけストリームに入る（無音区間は音声なし。承認済みの方針）
+- 音声: 壁時計基準で無音区間もゼロで埋め、音声 stream を録画実時間と揃える（再生区間だけだと stream が短くなり映像とズレるため。サンプルフレームの整数倍で埋める）
 - トレイアイコン: `assets/scam.ico`（待機）/ `assets/scam_recording.ico`（録画中）。再生成は `powershell -NoProfile -File tools/makeicon.ps1`
-
-## トラブル
-
-- **ffmpeg が見つからない**: `winget` で入れた PATH は既に開いているシェルに反映されないことがある。`config.yaml` の `ffmpeg_path` にフルパスを書く
-- **NVENC が probe で失敗**: `h264_nvenc` の `-rc` に `cq`/`cqp` は不正（`-cq` 単独を使う）。probe は 64x64 で失敗し 256x256 で成功する
-- **30fps が出ない**: 静的画面ではフレームが来ないため、グリッド基準で直近フレームを複製して 30fps を保つ（実測 30.0fps）
-
-## ビルド・検証
-
-```
-dotnet build
-dotnet test
-dev-toolchain format .
-dev-toolchain lint .
-dev-toolchain scan .
-```
-
-- Release ビルド: `dotnet build -c Release`（実測 0警告0エラー）。配布は `dotnet publish -c Release -o publish\scam`
 
 コミットは Conventional Commits + REQ-ID（例: `feat: REQ-006 出力ファイル命名規則を追加`）。
